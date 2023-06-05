@@ -3,7 +3,7 @@ import { ChakraProvider } from "@chakra-ui/react";
 import { Analytics } from "@vercel/analytics/react";
 
 import { DefaultSeo } from "next-seo";
-import SEO from "next-seo.config";
+import SEO from "../../next-seo.config";
 
 import theme from "../theme";
 import { AppProps } from "next/app";
