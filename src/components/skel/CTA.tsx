@@ -27,7 +27,7 @@ export const CTA = () => (
       <Button
         as={ChakraLink}
         isExternal
-        href="https://github.com/rusvac/ability"
+        href="https://github.com/rusvac/abi-app"
         variant="outline"
         rounded="button"
         flexGrow={1}

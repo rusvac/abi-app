@@ -51,7 +51,7 @@ const Menu = ({ addAboutTab }: any) => {
           </MenuItem>
           <MenuItem
             as={ChakraLink}
-            href="https://github.com/rusvac/ability"
+            href="https://github.com/rusvac/abi-app"
             isExternal
           >
             {"🐙 github ↗"}
