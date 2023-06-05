@@ -9,6 +9,8 @@ import LINKORACLEABI from "./linkOracle.json";
 
 import ERC20LOCKERABI from "./erc20locker.json";
 
+import ENSREGISTRY from "./ensRegistry.json";
+
 export const OWNABLE: Preset = {
   id: "Ownable",
   name: "Ownable",
@@ -45,4 +47,10 @@ const ERC20LOCKER: Preset = {
   interface: ERC20LOCKERABI,
 };
 
-export const abis = [OWNABLE, ERC20, ERC721, ERC4626, LINKORACLE, ERC20LOCKER];
+const ENSRegistry: Preset = {
+  id: "ENSREG",
+  name: "ENS Registry",
+  interface: ENSREGISTRY,
+};
+
+export const abis = [OWNABLE, ERC20, ERC721, ERC4626, LINKORACLE, ENSRegistry];
