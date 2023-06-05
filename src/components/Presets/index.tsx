@@ -34,7 +34,7 @@ const PresetsMenu = ({ addABITab, addPasteTab }: any) => {
           bg: mode("gray.200", "gray.600"),
         }}
       >
-        P
+        📄
       </MenuButton>
       <MenuList>
         <MenuItem onClick={addPasteTab}>{`📝 paste in json`}</MenuItem>

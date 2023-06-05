@@ -35,7 +35,7 @@ const Menu = ({ addAboutTab }: any) => {
           bg: mode("gray.200", "gray.600"),
         }}
       >
-        =
+        🔷
       </MenuButton>
       <MenuList>
         <MenuGroup title="abi.lol">
