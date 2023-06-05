@@ -16,7 +16,7 @@ import {
 
 import { abis } from "@/lib/abis";
 
-const Menu = ({ addABI, addEmptyTab }: any) => {
+const Menu = ({ addAboutTab }: any) => {
   const { colorMode, toggleColorMode } = useColorMode();
 
   return (
@@ -25,11 +25,11 @@ const Menu = ({ addABI, addEmptyTab }: any) => {
         as={Button}
         size="sm"
         fontWeight="normal"
-        roundedTop="none"
+        rounded="none"
         py={1}
         bg={mode("gray.200", "gray.700")}
         _hover={{
-          bg: mode("gray.200", "gray.600"),
+          bg: mode("gray.300", "gray.600"),
         }}
         _selected={{
           bg: mode("gray.200", "gray.600"),
@@ -40,30 +40,21 @@ const Menu = ({ addABI, addEmptyTab }: any) => {
       <MenuList>
         <MenuGroup title="abi.lol">
           <MenuItem onClick={toggleColorMode}>
-            {colorMode == "light" ? `🌚 Dark Mode` : `🌞 Light Mode`}
+            {colorMode == "light" ? `🌚 dark mode` : `🌞 light mode`}
           </MenuItem>
-          <MenuItem onClick={addEmptyTab}>{`📝 Paste JSON ABI`}</MenuItem>
+          <MenuItem onClick={addAboutTab}>{`😵 about abi.lol`}</MenuItem>
         </MenuGroup>
         <MenuDivider />
-        <MenuGroup title="Presets">
-          {abis.map((el, i) => (
-            <Box key={i}>
-              <MenuItem w="full" onClick={() => addABI(el)}>
-                {el.name}
-              </MenuItem>
-            </Box>
-          ))}
-        </MenuGroup>
-        <MenuGroup title="Links">
-          <MenuItem as={ChakraLink} href="/">
-            {"Homepage ↗"}
+        <MenuGroup title="links">
+          <MenuItem as={ChakraLink} href="https://abi.lol/">
+            {"🏠 homepage ↗"}
           </MenuItem>
           <MenuItem
             as={ChakraLink}
             href="https://github.com/rusvac/ability"
             isExternal
           >
-            {"Github Repo ↗"}
+            {"🐙 github ↗"}
           </MenuItem>
         </MenuGroup>
       </MenuList>

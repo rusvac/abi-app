@@ -22,6 +22,23 @@ import ContractABI from "../components/ContractABI";
 import React, { useState } from "react";
 import SelectABI from "./SelectABI";
 import Menu from "./Menu";
+import PresetsMenu from "./Presets";
+import AboutABI from "./AboutABI";
+
+interface AppTab {
+  title: string;
+
+  type: "abi" | "paste" | "about";
+
+  content: any;
+}
+
+const pasteTab: AppTab = {
+  title: "JSON ABI",
+  content: undefined,
+  type: "paste",
+};
+const aboutTab: AppTab = { title: "ABI.LOL", content: "hello", type: "about" };
 
 const CustomTab = React.forwardRef((props: any, ref) => {
   // 1. Reuse the `useTab` hook
@@ -47,6 +64,7 @@ const CustomTab = React.forwardRef((props: any, ref) => {
       _selected={{
         bg: mode("gray.200", "gray.600"),
       }}
+      w="fit-content"
     >
       <Box>{tabProps.children}</Box>
       {isSelected && normalizedProps.onClear ? (
@@ -60,36 +78,51 @@ const CustomTab = React.forwardRef((props: any, ref) => {
   );
 });
 
-const emptyTab = { title: "Empty ABI", content: undefined };
-
 const AbiApp = () => {
   const [tabIndex, setTabIndex] = useState<number>(0);
-  const [tabs, setTabs] = useState<any[]>([emptyTab]);
+  const [tabs, setTabs] = useState<Array<AppTab>>([pasteTab]);
 
   const handleTabsChange = (index) => {
     setTabIndex(index);
   };
 
-  const addABI = (ABI) => {
-    setTabs([...tabs, { title: ABI.id, content: ABI }]);
+  const addPasteTab = () => {
+    setTabs([...tabs, pasteTab]);
     handleTabsChange(tabs.length);
   };
 
-  const addEmptyTab = () => {
-    setTabs([...tabs, emptyTab]);
+  const addAboutTab = () => {
+    setTabs([...tabs, aboutTab]);
+    handleTabsChange(tabs.length);
+  };
+
+  const addABITab = ({ abi }) => {
+    const newTab: AppTab = {
+      title: abi.name,
+      content: abi,
+      type: "abi",
+    };
+    setTabs([...tabs, newTab]);
     handleTabsChange(tabs.length);
   };
 
   const updateTab = (id, content) => {
-    setTabs(
-      tabs.map((el, i) => (i == id ? { title: "Pasted ABI", content } : el))
-    );
+    const newTab: AppTab = {
+      title: "Pasted ABI",
+      type: "abi",
+      content,
+    };
+    const newTabs: Array<AppTab> = tabs.map((tab, i) => ({
+      ...tab,
+      ...(i == id ? newTab : {}),
+    }));
+    setTabs(newTabs);
   };
 
   const closeTab = (id) => {
     let newTabs = [...tabs.filter((el, i) => id != i)];
     if (newTabs.length == 0) {
-      newTabs = [emptyTab];
+      newTabs = [pasteTab];
     }
     setTabs(newTabs);
   };
@@ -102,22 +135,28 @@ const AbiApp = () => {
           colorScheme="gray"
           index={tabIndex}
           onChange={handleTabsChange}
+          maxW="100vw"
+          overflowX="hidden"
         >
-          <TabList>
-            <Menu addABI={addABI} addEmptyTab={addEmptyTab} />
-            {tabs.map((el, i) => (
-              <CustomTab key={i} onClear={() => closeTab(i)}>
-                {el.title}
-              </CustomTab>
-            ))}
-          </TabList>
+          <Flex overflowX="auto">
+            <TabList w="fit-content">
+              <Menu addAboutTab={addAboutTab} />
+              <PresetsMenu addABITab={addABITab} addPasteTab={addPasteTab} />
+              {tabs.map((el, i) => (
+                <CustomTab key={i} onClear={() => closeTab(i)}>
+                  {el.title}
+                </CustomTab>
+              ))}
+            </TabList>
+          </Flex>
           <TabPanels>
             {tabs.map((el, i) => (
               <TabPanel key={i} p={0}>
-                {el && el.content && <ContractABI abi={el.content} />}
-                {el && !el.content && (
+                {el?.type == "abi" && <ContractABI abi={el.content} />}
+                {el?.type == "paste" && (
                   <SelectABI tab={i} updateTab={updateTab} />
                 )}
+                {el?.type == "about" && <AboutABI />}
               </TabPanel>
             ))}
           </TabPanels>
