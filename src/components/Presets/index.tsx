@@ -12,6 +12,9 @@ import {
   Link as ChakraLink,
   useColorMode,
   useColorModeValue as mode,
+  Flex,
+  Text,
+  Kbd,
 } from "@chakra-ui/react";
 
 import { abis } from "@/lib/abis";
@@ -48,6 +51,26 @@ const PresetsMenu = ({ closure, menuRef, addABITab, addPasteTab }: any) => {
               </MenuItem>
             </Box>
           ))}
+        </MenuGroup>
+        <MenuDivider />
+        <MenuGroup>
+          <Flex justifyContent="space-between">
+            <Box />
+            <Flex px={4}>
+              <Box pr={2}>
+                <Text>open with </Text>
+              </Box>
+              <Flex>
+                <Box pr={1}>
+                  <Kbd>shift</Kbd>
+                </Box>
+                <Text>+</Text>
+                <Box pl={1}>
+                  <Kbd>p</Kbd>
+                </Box>
+              </Flex>
+            </Flex>
+          </Flex>
         </MenuGroup>
       </MenuList>
     </ChakraMenu>

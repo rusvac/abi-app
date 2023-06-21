@@ -12,6 +12,9 @@ import {
   Link as ChakraLink,
   useColorMode,
   useColorModeValue as mode,
+  Kbd,
+  Flex,
+  Text,
 } from "@chakra-ui/react";
 
 import { abis } from "@/lib/abis";
@@ -58,6 +61,26 @@ const Menu = ({ closure, menuRef, addAboutTab }: any) => {
           >
             {"🐙 github ↗"}
           </MenuItem>
+        </MenuGroup>
+        <MenuDivider />
+        <MenuGroup>
+          <Flex justifyContent="space-between">
+            <Box />
+            <Flex px={4}>
+              <Box pr={2}>
+                <Text>open with </Text>
+              </Box>
+              <Flex>
+                <Box pr={1}>
+                  <Kbd>shift</Kbd>
+                </Box>
+                <Text>+</Text>
+                <Box pl={1}>
+                  <Kbd>m</Kbd>
+                </Box>
+              </Flex>
+            </Flex>
+          </Flex>
         </MenuGroup>
       </MenuList>
     </ChakraMenu>
