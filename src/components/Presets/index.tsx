@@ -16,15 +16,15 @@ import {
 
 import { abis } from "@/lib/abis";
 
-const PresetsMenu = ({ addABITab, addPasteTab }: any) => {
+const PresetsMenu = ({ closure, menuRef, addABITab, addPasteTab }: any) => {
   return (
-    <ChakraMenu>
+    <ChakraMenu isOpen={closure.isOpen} onClose={closure.onClose}>
       <MenuButton
         as={Button}
+        ref={menuRef}
         size="sm"
         fontWeight="normal"
-        roundedTop="none"
-        roundedBottomLeft="none"
+        rounded="none"
         py={1}
         bg={mode("gray.200", "gray.700")}
         _hover={{
@@ -33,6 +33,7 @@ const PresetsMenu = ({ addABITab, addPasteTab }: any) => {
         _selected={{
           bg: mode("gray.200", "gray.600"),
         }}
+        onClick={closure.onOpen}
       >
         📄
       </MenuButton>

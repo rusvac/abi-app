@@ -13,13 +13,14 @@ import {
   useColorModeValue as mode,
   useTab,
   useMultiStyleConfig,
+  useDisclosure,
 } from "@chakra-ui/react";
 import { SmallCloseIcon } from "@chakra-ui/icons";
 
 import { Container } from "../components/skel/Container";
 import ContractABI from "../components/ContractABI";
 
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import SelectABI from "./SelectABI";
 import Menu from "./Menu";
 import PresetsMenu from "./Presets";
@@ -55,7 +56,7 @@ const CustomTab = React.forwardRef((props: any, ref) => {
       {...tabProps}
       size="sm"
       fontWeight="normal"
-      roundedTop="none"
+      rounded="none"
       py={1}
       bg={mode("gray.300", "gray.700")}
       _hover={{
@@ -81,6 +82,39 @@ const CustomTab = React.forwardRef((props: any, ref) => {
 const AbiApp = () => {
   const [tabIndex, setTabIndex] = useState<number>(0);
   const [tabs, setTabs] = useState<Array<AppTab>>([pasteTab]);
+
+  const menuRef = useRef(null);
+  const presetRef = useRef(null);
+
+  const mainMenu = useDisclosure();
+  const presetMenu = useDisclosure();
+
+  const handleKeyPress = useCallback((event: any) => {
+    if (event.shiftKey === true) {
+      if (event.key === "M") {
+        event.preventDefault();
+        menuRef.current.focus();
+        mainMenu.onOpen();
+      }
+      if (event.key === "P") {
+        event.preventDefault();
+        presetRef.current.focus();
+        presetMenu.onOpen();
+      }
+
+      console.log(`Key pressed: ${event.key}`);
+    }
+  }, []);
+
+  useEffect(() => {
+    // attach the event listener
+    document.addEventListener("keydown", handleKeyPress);
+
+    // remove the event listener
+    return () => {
+      document.removeEventListener("keydown", handleKeyPress);
+    };
+  }, [handleKeyPress]);
 
   const handleTabsChange = (index) => {
     setTabIndex(index);
@@ -140,8 +174,17 @@ const AbiApp = () => {
         >
           <Flex overflowX="auto">
             <TabList w="fit-content">
-              <Menu addAboutTab={addAboutTab} />
-              <PresetsMenu addABITab={addABITab} addPasteTab={addPasteTab} />
+              <Menu
+                closure={mainMenu}
+                menuRef={menuRef}
+                addAboutTab={addAboutTab}
+              />
+              <PresetsMenu
+                closure={presetMenu}
+                menuRef={presetRef}
+                addABITab={addABITab}
+                addPasteTab={addPasteTab}
+              />
               {tabs.map((el, i) => (
                 <CustomTab key={i} onClear={() => closeTab(i)}>
                   {el.title}

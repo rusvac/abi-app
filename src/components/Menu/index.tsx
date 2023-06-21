@@ -16,13 +16,14 @@ import {
 
 import { abis } from "@/lib/abis";
 
-const Menu = ({ addAboutTab }: any) => {
+const Menu = ({ closure, menuRef, addAboutTab }: any) => {
   const { colorMode, toggleColorMode } = useColorMode();
 
   return (
-    <ChakraMenu>
+    <ChakraMenu isOpen={closure.isOpen} onClose={closure.onClose}>
       <MenuButton
         as={Button}
+        ref={menuRef}
         size="sm"
         fontWeight="normal"
         rounded="none"
@@ -34,6 +35,7 @@ const Menu = ({ addAboutTab }: any) => {
         _selected={{
           bg: mode("gray.200", "gray.600"),
         }}
+        onClick={closure.onOpen}
       >
         🔷
       </MenuButton>
