@@ -19,8 +19,30 @@ import {
 
 import { abis } from "@/lib/abis";
 
-const Menu = ({ closure, menuRef, addAboutTab }: any) => {
+const modeCycle = {
+  docs: "sold",
+  sold: "docs",
+};
+
+const abiModeLabels = {
+  docs: "🌈 visual view",
+  sold: "📄 solidity view",
+};
+
+const Menu = ({ closure, menuRef, addAboutTab, config, setConfig }: any) => {
   const { colorMode, toggleColorMode } = useColorMode();
+
+  const { abiMode } = config;
+
+  const modeLabel = abiModeLabels[abiMode];
+
+  const cycleAbiModes = () => {
+    const nextMode = modeCycle[abiMode];
+
+    setConfig({
+      abiMode: nextMode,
+    });
+  };
 
   return (
     <ChakraMenu isOpen={closure.isOpen} onClose={closure.onClose}>
@@ -49,6 +71,10 @@ const Menu = ({ closure, menuRef, addAboutTab }: any) => {
           </MenuItem>
           <MenuItem onClick={addAboutTab}>{`😵 about abi.lol`}</MenuItem>
         </MenuGroup>
+        {/* <MenuDivider />
+        <MenuGroup title="config">
+          <MenuItem onClick={cycleAbiModes}>{modeLabel}</MenuItem>
+        </MenuGroup> */}
         <MenuDivider />
         <MenuGroup title="links">
           <MenuItem as={ChakraLink} href="https://abi.lol/">
@@ -61,6 +87,9 @@ const Menu = ({ closure, menuRef, addAboutTab }: any) => {
           >
             {"🐙 github ↗"}
           </MenuItem>
+          {/* <MenuItem as={ChakraLink} href="https://gnidan.github.io/abi-to-sol/" isExternal>
+            {"🍥 abi-to-sol"}
+          </MenuItem> */}
         </MenuGroup>
         <MenuDivider />
         <MenuGroup>

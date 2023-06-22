@@ -25,6 +25,7 @@ import SelectABI from "./SelectABI";
 import Menu from "./Menu";
 import PresetsMenu from "./Presets";
 import AboutABI from "./AboutABI";
+import SolidityABI from "./SolidityABI";
 
 interface AppTab {
   title: string;
@@ -40,6 +41,10 @@ const pasteTab: AppTab = {
   type: "paste",
 };
 const aboutTab: AppTab = { title: "ABI.LOL", content: "hello", type: "about" };
+
+const baseConfig = {
+  abiMode: "docs",
+};
 
 const CustomTab = React.forwardRef((props: any, ref) => {
   // 1. Reuse the `useTab` hook
@@ -79,7 +84,21 @@ const CustomTab = React.forwardRef((props: any, ref) => {
   );
 });
 
+const DisplayABI = ({ config, abi }: any) => {
+  const { abiMode } = config;
+
+  const { content } = abi;
+
+  return (
+    <>
+      {abiMode === "docs" && <ContractABI abi={content} />}
+      {abiMode === "sold" && <SolidityABI abi={content} />}
+    </>
+  );
+};
+
 const AbiApp = () => {
+  const [config, setConfig] = useState<any>({ ...baseConfig });
   const [tabIndex, setTabIndex] = useState<number>(0);
   const [tabs, setTabs] = useState<Array<AppTab>>([pasteTab]);
 
@@ -178,6 +197,13 @@ const AbiApp = () => {
                 closure={mainMenu}
                 menuRef={menuRef}
                 addAboutTab={addAboutTab}
+                config={config}
+                setConfig={(e) =>
+                  setConfig({
+                    ...config,
+                    ...e,
+                  })
+                }
               />
               <PresetsMenu
                 closure={presetMenu}
@@ -195,7 +221,7 @@ const AbiApp = () => {
           <TabPanels>
             {tabs.map((el, i) => (
               <TabPanel key={i} p={0}>
-                {el?.type == "abi" && <ContractABI abi={el.content} />}
+                {el?.type == "abi" && <DisplayABI abi={el} config={config} />}
                 {el?.type == "paste" && (
                   <SelectABI tab={i} updateTab={updateTab} />
                 )}
