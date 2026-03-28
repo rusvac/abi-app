@@ -1,3 +1,5 @@
+'use client';
+
 import {
   Box,
   Button,
@@ -5,9 +7,7 @@ import {
   MenuButton,
   MenuList,
   MenuItem,
-  MenuItemOption,
   MenuGroup,
-  MenuOptionGroup,
   MenuDivider,
   Link as ChakraLink,
   useColorMode,
@@ -17,35 +17,18 @@ import {
   Text,
 } from "@chakra-ui/react";
 
-import { abis } from "@/lib/abis";
+interface MenuProps {
+  menuRef: React.RefObject<HTMLButtonElement | null>;
+  addAboutTab: () => void;
+  config: { abiMode: string };
+  setConfig: (e: { abiMode?: string }) => void;
+}
 
-const modeCycle = {
-  docs: "sold",
-  sold: "docs",
-};
-
-const abiModeLabels = {
-  docs: "🌈 visual view",
-  sold: "📄 solidity view",
-};
-
-const Menu = ({ closure, menuRef, addAboutTab, config, setConfig }: any) => {
+const Menu = ({ menuRef, addAboutTab, config, setConfig }: MenuProps) => {
   const { colorMode, toggleColorMode } = useColorMode();
 
-  const { abiMode } = config;
-
-  const modeLabel = abiModeLabels[abiMode];
-
-  const cycleAbiModes = () => {
-    const nextMode = modeCycle[abiMode];
-
-    setConfig({
-      abiMode: nextMode,
-    });
-  };
-
   return (
-    <ChakraMenu isOpen={closure.isOpen} onClose={closure.onClose}>
+    <ChakraMenu>
       <MenuButton
         as={Button}
         ref={menuRef}
@@ -60,7 +43,6 @@ const Menu = ({ closure, menuRef, addAboutTab, config, setConfig }: any) => {
         _selected={{
           bg: mode("gray.200", "gray.600"),
         }}
-        onClick={closure.onOpen}
       >
         🔷
       </MenuButton>
@@ -71,10 +53,6 @@ const Menu = ({ closure, menuRef, addAboutTab, config, setConfig }: any) => {
           </MenuItem>
           <MenuItem onClick={addAboutTab}>{`😵 about abi.lol`}</MenuItem>
         </MenuGroup>
-        {/* <MenuDivider />
-        <MenuGroup title="config">
-          <MenuItem onClick={cycleAbiModes}>{modeLabel}</MenuItem>
-        </MenuGroup> */}
         <MenuDivider />
         <MenuGroup title="links">
           <MenuItem as={ChakraLink} href="https://abi.lol/">
@@ -87,9 +65,6 @@ const Menu = ({ closure, menuRef, addAboutTab, config, setConfig }: any) => {
           >
             {"🐙 github ↗"}
           </MenuItem>
-          {/* <MenuItem as={ChakraLink} href="https://gnidan.github.io/abi-to-sol/" isExternal>
-            {"🍥 abi-to-sol"}
-          </MenuItem> */}
         </MenuGroup>
         <MenuDivider />
         <MenuGroup>

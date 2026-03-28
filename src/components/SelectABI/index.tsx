@@ -1,25 +1,27 @@
+'use client';
+
 import {
-  Link as ChakraLink,
-  Text,
   Box,
-  Code,
-  Flex,
-  useColorModeValue as mode,
   Textarea,
-  Button,
 } from "@chakra-ui/react";
 import { useState } from "react";
+import { Preset } from "@/lib/types";
 
-const SelectABI = ({ tab, updateTab }: any) => {
+interface SelectABIProps {
+  tab: number;
+  updateTab: (id: number, content: Preset) => void;
+}
+
+const SelectABI = ({ tab, updateTab }: SelectABIProps) => {
   const [value, setValue] = useState<string>("");
 
-  const handleInputChange = (e) => {
-    let inputValue = e.target.value;
+  const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const inputValue = e.target.value;
     let newABI = undefined;
 
     try {
       newABI = JSON.parse(inputValue);
-    } catch (error) {}
+    } catch {}
 
     if (newABI) {
       updateTab(tab, {
@@ -54,18 +56,3 @@ const SelectABI = ({ tab, updateTab }: any) => {
 };
 
 export default SelectABI;
-
-{
-  /* <Box>
-<Box>
-  <Text fontSize="xl">Common ABIs</Text>
-</Box>
-{abis.map((el, i) => (
-  <Box key={i} p={1}>
-    <Button w="full" onClick={() => usePresetABI(el)}>
-      {el.name}
-    </Button>
-  </Box>
-))}
-</Box> */
-}

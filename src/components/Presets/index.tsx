@@ -1,3 +1,5 @@
+'use client';
+
 import {
   Box,
   Button,
@@ -5,12 +7,8 @@ import {
   MenuButton,
   MenuList,
   MenuItem,
-  MenuItemOption,
   MenuGroup,
-  MenuOptionGroup,
   MenuDivider,
-  Link as ChakraLink,
-  useColorMode,
   useColorModeValue as mode,
   Flex,
   Text,
@@ -18,10 +16,17 @@ import {
 } from "@chakra-ui/react";
 
 import { abis } from "@/lib/abis";
+import { Preset } from "@/lib/types";
 
-const PresetsMenu = ({ closure, menuRef, addABITab, addPasteTab }: any) => {
+interface PresetsMenuProps {
+  menuRef: React.RefObject<HTMLButtonElement | null>;
+  addABITab: (args: { abi: Preset }) => void;
+  addPasteTab: () => void;
+}
+
+const PresetsMenu = ({ menuRef, addABITab, addPasteTab }: PresetsMenuProps) => {
   return (
-    <ChakraMenu isOpen={closure.isOpen} onClose={closure.onClose}>
+    <ChakraMenu>
       <MenuButton
         as={Button}
         ref={menuRef}
@@ -36,7 +41,6 @@ const PresetsMenu = ({ closure, menuRef, addABITab, addPasteTab }: any) => {
         _selected={{
           bg: mode("gray.200", "gray.600"),
         }}
-        onClick={closure.onOpen}
       >
         📄
       </MenuButton>

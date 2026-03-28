@@ -1,3 +1,5 @@
+'use client';
+
 import { ABIFunction, Preset } from "@/lib/types";
 import {
   Box,

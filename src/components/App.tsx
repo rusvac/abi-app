@@ -1,3 +1,5 @@
+'use client';
+
 import {
   Link as ChakraLink,
   Text,
@@ -13,7 +15,6 @@ import {
   useColorModeValue as mode,
   useTab,
   useMultiStyleConfig,
-  useDisclosure,
 } from "@chakra-ui/react";
 import { SmallCloseIcon } from "@chakra-ui/icons";
 
@@ -26,13 +27,16 @@ import Menu from "./Menu";
 import PresetsMenu from "./Presets";
 import AboutABI from "./AboutABI";
 import SolidityABI from "./SolidityABI";
+import { Preset } from "@/lib/types";
 
 interface AppTab {
   title: string;
-
   type: "abi" | "paste" | "about";
+  content?: Preset;
+}
 
-  content: any;
+interface AppConfig {
+  abiMode: string;
 }
 
 const pasteTab: AppTab = {
@@ -40,21 +44,22 @@ const pasteTab: AppTab = {
   content: undefined,
   type: "paste",
 };
-const aboutTab: AppTab = { title: "ABI.LOL", content: "hello", type: "about" };
+const aboutTab: AppTab = { title: "ABI.LOL", content: undefined, type: "about" };
 
-const baseConfig = {
+const baseConfig: AppConfig = {
   abiMode: "docs",
 };
 
-const CustomTab = React.forwardRef((props: any, ref) => {
-  // 1. Reuse the `useTab` hook
+interface CustomTabProps {
+  onClear?: () => void;
+  children?: React.ReactNode;
+}
+
+const CustomTab = React.forwardRef<HTMLButtonElement, CustomTabProps>((props, ref) => {
   const tabProps = useTab({ ...props, ref });
   const isSelected = !!tabProps["aria-selected"];
 
-  // 2. Hook into the Tabs `size`, `variant`, props
   const styles = useMultiStyleConfig("Tabs", tabProps);
-
-  const normalizedProps: any = { ...tabProps };
 
   return (
     <Button
@@ -73,8 +78,8 @@ const CustomTab = React.forwardRef((props: any, ref) => {
       w="fit-content"
     >
       <Box>{tabProps.children}</Box>
-      {isSelected && normalizedProps.onClear ? (
-        <Box px={1} onClick={normalizedProps.onClear}>
+      {isSelected && props.onClear ? (
+        <Box px={1} onClick={props.onClear}>
           <SmallCloseIcon />
         </Box>
       ) : (
@@ -84,58 +89,55 @@ const CustomTab = React.forwardRef((props: any, ref) => {
   );
 });
 
-const DisplayABI = ({ config, abi }: any) => {
-  const { abiMode } = config;
+CustomTab.displayName = "CustomTab";
 
+interface DisplayABIProps {
+  config: AppConfig;
+  abi: AppTab;
+}
+
+const DisplayABI = ({ config, abi }: DisplayABIProps) => {
+  const { abiMode } = config;
   const { content } = abi;
 
   return (
     <>
-      {abiMode === "docs" && <ContractABI abi={content} />}
-      {abiMode === "sold" && <SolidityABI abi={content} />}
+      {abiMode === "docs" && content && <ContractABI abi={content} />}
+      {abiMode === "sold" && content && <SolidityABI abi={content} />}
     </>
   );
 };
 
 const AbiApp = () => {
-  const [config, setConfig] = useState<any>({ ...baseConfig });
+  const [config, setConfig] = useState<AppConfig>({ ...baseConfig });
   const [tabIndex, setTabIndex] = useState<number>(0);
-  const [tabs, setTabs] = useState<Array<AppTab>>([pasteTab]);
+  const [tabs, setTabs] = useState<AppTab[]>([pasteTab]);
 
-  const menuRef = useRef(null);
-  const presetRef = useRef(null);
+  const menuRef = useRef<HTMLButtonElement>(null);
+  const presetRef = useRef<HTMLButtonElement>(null);
 
-  const mainMenu = useDisclosure();
-  const presetMenu = useDisclosure();
-
-  const handleKeyPress = useCallback((event: any) => {
+  const handleKeyPress = useCallback((event: KeyboardEvent) => {
     if (event.shiftKey === true) {
       if (event.key === "M") {
         event.preventDefault();
-        menuRef.current.focus();
-        mainMenu.onOpen();
+        menuRef.current?.click();
       }
       if (event.key === "P") {
         event.preventDefault();
-        presetRef.current.focus();
-        presetMenu.onOpen();
+        presetRef.current?.click();
       }
-
-      console.log(`Key pressed: ${event.key}`);
     }
   }, []);
 
   useEffect(() => {
-    // attach the event listener
     document.addEventListener("keydown", handleKeyPress);
 
-    // remove the event listener
     return () => {
       document.removeEventListener("keydown", handleKeyPress);
     };
   }, [handleKeyPress]);
 
-  const handleTabsChange = (index) => {
+  const handleTabsChange = (index: number) => {
     setTabIndex(index);
   };
 
@@ -149,7 +151,7 @@ const AbiApp = () => {
     handleTabsChange(tabs.length);
   };
 
-  const addABITab = ({ abi }) => {
+  const addABITab = ({ abi }: { abi: Preset }) => {
     const newTab: AppTab = {
       title: abi.name,
       content: abi,
@@ -159,21 +161,21 @@ const AbiApp = () => {
     handleTabsChange(tabs.length);
   };
 
-  const updateTab = (id, content) => {
+  const updateTab = (id: number, content: Preset) => {
     const newTab: AppTab = {
       title: "Pasted ABI",
       type: "abi",
       content,
     };
-    const newTabs: Array<AppTab> = tabs.map((tab, i) => ({
+    const newTabs: AppTab[] = tabs.map((tab, i) => ({
       ...tab,
       ...(i == id ? newTab : {}),
     }));
     setTabs(newTabs);
   };
 
-  const closeTab = (id) => {
-    let newTabs = [...tabs.filter((el, i) => id != i)];
+  const closeTab = (id: number) => {
+    let newTabs = [...tabs.filter((_el, i) => id != i)];
     if (newTabs.length == 0) {
       newTabs = [pasteTab];
     }
@@ -194,11 +196,10 @@ const AbiApp = () => {
           <Flex overflowX="auto">
             <TabList w="fit-content">
               <Menu
-                closure={mainMenu}
                 menuRef={menuRef}
                 addAboutTab={addAboutTab}
                 config={config}
-                setConfig={(e) =>
+                setConfig={(e: Partial<AppConfig>) =>
                   setConfig({
                     ...config,
                     ...e,
@@ -206,7 +207,6 @@ const AbiApp = () => {
                 }
               />
               <PresetsMenu
-                closure={presetMenu}
                 menuRef={presetRef}
                 addABITab={addABITab}
                 addPasteTab={addPasteTab}

@@ -1,17 +1,14 @@
+'use client';
+
 import {
   Link,
   Text,
   Box,
-  Code,
-  Flex,
-  useColorModeValue as mode,
-  Textarea,
-  Button,
   Card,
   Heading,
   Stack,
+  Flex,
 } from "@chakra-ui/react";
-import { useState } from "react";
 
 const AboutABI = () => {
   return (
@@ -33,7 +30,7 @@ const AboutABI = () => {
           <Box pt={4} mx="auto" w="fit-content"></Box>
           <Stack pt={2} spacing={1}>
             <Flex fontSize="sm">
-              <Text fontFamily="DM Sans">app contact 👋</Text>
+              <Text fontFamily="DM Sans">app contact</Text>
               <Link
                 fontFamily="DM Sans"
                 ml={1}
@@ -44,7 +41,7 @@ const AboutABI = () => {
               </Link>
             </Flex>
             <Flex fontSize="sm">
-              <Text fontFamily="DM Sans">created w/🧡 by </Text>
+              <Text fontFamily="DM Sans">created by </Text>
               <Link
                 fontFamily="DM Sans"
                 ml={1}
@@ -62,18 +59,3 @@ const AboutABI = () => {
 };
 
 export default AboutABI;
-
-{
-  /* <Box>
-<Box>
-  <Text fontSize="xl">Common ABIs</Text>
-</Box>
-{abis.map((el, i) => (
-  <Box key={i} p={1}>
-    <Button w="full" onClick={() => usePresetABI(el)}>
-      {el.name}
-    </Button>
-  </Box>
-))}
-</Box> */
-}

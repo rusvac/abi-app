@@ -1,3 +1,5 @@
+'use client';
+
 import { ABIFunction, ABIFunctionType } from "@/lib/types";
 import {
   Badge,

@@ -1,3 +1,5 @@
+'use client';
+
 import React from "react";
 import { Global, css } from "@emotion/react";
 
@@ -6,16 +8,16 @@ const fonts = `
 @import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap');
 `;
 
-const GlobalStyle = ({ children }) => (
+const GlobalStyle = ({ children }: { children: React.ReactNode }) => (
   <>
     <Global
       styles={css`
         ${fonts}
         html {
-          scoll-behavior: smooth;
+          scroll-behavior: smooth;
           cursor: default;
         }
-        #__next {
+        body {
           display: flex;
           flex-direction: column;
           min-height: 100vh;

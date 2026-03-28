@@ -1,31 +1,27 @@
 {
   "private": true,
   "scripts": {
-    "dev": "next",
+    "dev": "next dev --turbopack",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@chakra-ui/icons": "^2.0.2",
-    "@chakra-ui/react": "^2.2.1",
-    "@chakra-ui/theme-tools": "^2.0.2",
-    "@emotion/react": "^11.9.0",
-    "@emotion/styled": "^11.9.0",
-    "@vercel/analytics": "^1.0.1",
-    "framer-motion": "^6.3.0",
-    "next": "13.4.20-canary.13",
-    "next-seo": "^6.0.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "@chakra-ui/icons": "^2.2.4",
+    "@chakra-ui/react": "^2.10.4",
+    "@chakra-ui/theme-tools": "^2.2.5",
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
+    "@vercel/analytics": "^1.5.0",
+    "framer-motion": "^11.18.0",
+    "next": "^15.3.1",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
   },
   "devDependencies": {
-    "@types/node": "^18.0.0",
-    "@types/react": "^18.0.0",
-    "@types/react-dom": "^18.0.0",
-    "typescript": "^4.7.2"
-  },
-  "resolutions": {
-    "postcss": "8.4.31",
-    "nanoid": "3.3.8"
+    "@types/node": "^22.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "typescript": "^5.7.0"
   }
 }
